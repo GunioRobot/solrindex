@@ -14,7 +14,7 @@ class Post
   index_fields(
     :string       => [:title, :slug],
     :string_array => [:authors],
-    :text         => [:description],
+    :text         => [:body],
     :range_float  => [:rating],
     :date         => [:published_at]
   )
