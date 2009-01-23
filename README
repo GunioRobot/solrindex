@@ -1,0 +1,41 @@
+This is SolrIndex, an interface for Solr written at Curbed.com. It's rough and un(unit)tested, but has been in production for a while and seems to work pretty well. Documentation and cleanups are forthcoming. Definitely don't expect it to work out of the box.
+
+Take it and turn it into something useful for you (or use parts of it as a reference implementation).
+
+Assumes you have Will Paginate and Erik Hatcher's solr library installed.
+
+Example of how to declare a model's schema for searching:
+
+class Post
+  # title, body, rating and published_at are fields in the database.
+
+  has_many :authors
+
+  index_fields(
+    :string       => [:title, :slug],
+    :string_array => [:authors],
+    :text         => [:description],
+    :range_float  => [:rating],
+    :date         => [:published_at]
+  )
+
+  index_conditions(
+    :include    => [:authors],
+    :conditions => [ '? >= published_at', Date.today, true ],
+    :order      => "published_at DESC"
+  )
+  
+  
+  def authors_for_index
+    authors.map(&:name)
+  end
+  
+  def slug
+    title.downcase.gsub(/\s/, '_').gsub(/[^\w]/,'')
+  end
+  
+end
+
+
+
+... or thereabouts.
