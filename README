@@ -24,16 +24,16 @@ class Post
     :conditions => [ '? >= published_at', Date.today, true ],
     :order      => "published_at DESC"
   )
-  
-  
+
+
   def authors_for_index
     authors.map(&:name)
   end
-  
+
   def slug
     title.downcase.gsub(/\s/, '_').gsub(/[^\w]/,'')
   end
-  
+
 end
 
 
